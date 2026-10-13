@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Order Manager</title>
+<style>
+*{box-sizing:border-box}
+:root{--ink:#26364a;--muted:#758196;--primary:#5865d9;--primary-dark:#414fc1;--bg:#f2f5ff;--line:#e5e9f4;--green:#25835c;--orange:#bd6b2b}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#f4f6ff,#fff8f1);color:var(--ink);padding:30px 16px}
+.container{max-width:1000px;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:48px;height:48px;border-radius:15px;background:#5865d9;color:white;display:grid;place-items:center;font-size:24px;box-shadow:0 8px 18px #5865d933}
+h1{font-size:25px;margin:0 0 5px}
+.subtitle{font-size:13px;color:var(--muted)}
+.pill{background:#e6eaff;color:#414fc1;border-radius:30px;padding:9px 14px;font-size:12px;font-weight:700}
+.panel{background:#fff;border:1px solid #edf0f8;border-radius:22px;padding:24px;margin-bottom:20px;box-shadow:0 12px 35px #293b6410}
+.panel-heading{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.heading-icon{width:34px;height:34px;border-radius:11px;background:#f0f1ff;color:var(--primary);display:grid;place-items:center;font-size:17px}
+h2{font-size:18px;margin:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px 20px}
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-size:12px;font-weight:700;color:#526078}
+input,select{width:100%;height:42px;padding:0 13px;border:1px solid #dfe4ef;border-radius:11px;background:#fcfdff;font-size:14px;color:var(--ink);outline:none;transition:.2s}
+input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px #5865d91a}
+.actions{display:flex;align-items:center;gap:12px;margin-top:20px}
+button{border:0;border-radius:11px;padding:12px 17px;font-size:13px;font-weight:700;cursor:pointer;transition:transform .15s,background .15s}
+button:active{transform:scale(.97)}
+.primary{background:var(--primary);color:white;box-shadow:0 5px 12px #5865d92b}
+.primary:hover{background:var(--primary-dark)}
+.secondary{background:#fff0e3;color:#ad5b22}
+.secondary:hover{background:#ffe5ce}
+.message{display:none;margin-top:16px;padding:11px 13px;border-radius:10px;font-size:13px;font-weight:700}
+.message.success{display:block;background:#e8f8ef;color:#24774f}
+.message.error{display:block;background:#fff0ed;color:#b44435}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:650px}
+thead th{background:#34445e;color:#fff;text-align:left;padding:14px 12px;font-size:12px;white-space:nowrap}
+thead th:first-child{border-radius:10px 0 0 0}
+thead th:last-child{border-radius:0 10px 0 0}
+tbody td{padding:14px 12px;border-bottom:1px solid #edf0f6}
+tbody tr:nth-child(even){background:#f8f9ff}
+tbody tr:hover{background:#f0f2ff}
+.order-id{font-weight:700;color:var(--primary)}
+.amount{font-weight:700;color:var(--green)}
+.status{display:inline-block;border-radius:20px;padding:5px 9px;font-size:11px;font-weight:700;white-space:nowrap}
+.status.Preparing{background:#fff0cb;color:#946319}
+.status.Ready{background:#e0efff;color:#2766a0}
+.status.Delivered{background:#dff6e8;color:#27754c}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.summary-card{border-radius:16px;padding:19px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.summary-card.orders{background:#fff1df;border:1px solid #ffe5c4}
+.summary-card.sales{background:#e5f7e9;border:1px solid #d2efd9}
+.summary-label{font-size:12px;color:#6c7483;margin-bottom:7px}
+.summary-value{font-size:25px;font-weight:800;letter-spacing:-.5px}
+.orders .summary-value{color:#bc692c}
+.sales .summary-value{color:#25835c}
+.summary-emoji{font-size:27px}
+.empty{text-align:center;padding:28px;color:var(--muted)}
+@media(max-width:640px){body{padding:18px 10px}.topbar{align-items:flex-start}.pill{display:none}.panel{padding:17px;border-radius:17px}.grid{grid-template-columns:1fr;gap:14px}h1{font-size:21px}.summary{grid-template-columns:1fr}.summary-value{font-size:23px}.panel-heading{margin-bottom:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header class="topbar">
+<div class="brand">
+<div class="brand-icon">🍽</div>
+<div><h1>Food Order Manager</h1><div class="subtitle">Manage orders, track progress and sales</div></div>
+</div>
+<div class="pill">● ORDER DASHBOARD</div>
+</header>
+
+<section class="panel">
+<div class="panel-heading"><div class="heading-icon">＋</div><h2>Place New Order</h2></div>
+<form id="orderForm">
+<div class="grid">
+<div class="field"><label for="customer">Customer Name</label><input id="customer" placeholder="Enter customer name" required></div>
+<div class="field"><label for="food">Food Item</label><input id="food" placeholder="e.g. Pasta, Pizza, Burger" required></div>
+<div class="field"><label for="quantity">Quantity</label><input id="quantity" type="number" min="1" max="99" value="1" required></div>
+<div class="field"><label for="amount">Total Amount (₹)</label><input id="amount" type="number" min="1" placeholder="Enter total amount" required></div>
+</div>
+<div class="actions"><button class="primary" type="submit">＋ Place Order</button></div>
+<div id="message" class="message" role="status"></div>
+</form>
+</section>
+
+<section class="panel">
+<div class="panel-heading"><div class="heading-icon">▤</div><h2>Order Details</h2></div>
+<div class="actions" style="margin-top:0;margin-bottom:17px"><button class="secondary" id="viewOrders" type="button">↻ View Orders</button></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Order ID</th><th>Customer Name</th><th>Food Item</th><th>Quantity</th><th>Total Amount</th><th>Order Status</th></tr></thead>
+<tbody id="orderRows"></tbody>
+</table>
+</div>
+<div class="summary">
+<div class="summary-card orders"><div><div class="summary-label">Total Number of Orders</div><div class="summary-value" id="totalOrders">0</div></div><div class="summary-emoji">🧾</div></div>
+<div class="summary-card sales"><div><div class="summary-label">Total Sales Amount</div><div class="summary-value" id="totalSales">₹0</div></div><div class="summary-emoji">💰</div></div>
+</div>
+</section>
+</div>
+<script>
+const orders=[
+{id:1001,customer:"Aarav Sharma",food:"Margherita Pizza",quantity:2,amount:600,status:"Preparing"},
+{id:1002,customer:"Priya Patil",food:"Veg Burger",quantity:1,amount:180,status:"Ready"},
+{id:1003,customer:"Rohan Mehta",food:"Paneer Biryani",quantity:2,amount:500,status:"Delivered"},
+{id:1004,customer:"Sneha Joshi",food:"White Sauce Pasta",quantity:1,amount:250,status:"Preparing"},
+{id:1005,customer:"Aditya Kulkarni",food:"Masala Dosa",quantity:2,amount:240,status:"Delivered"},
+{id:1006,customer:"Hussain",food:"Pasta",quantity:2,amount:400,status:"Preparing"}
+];
+let nextId=1007;
+const rows=document.getElementById("orderRows");
+const message=document.getElementById("message");
+const money=value=>"₹"+value.toLocaleString("en-IN");
+function renderOrders(){
+rows.innerHTML="";
+orders.forEach(order=>{
+const tr=document.createElement("tr");
+[order.id,order.customer,order.food,order.quantity].forEach((value,index)=>{
+const td=document.createElement("td");
+td.textContent=value;
+if(index===0)td.className="order-id";
+tr.appendChild(td);
+});
+const amountCell=document.createElement("td");
+amountCell.textContent=money(order.amount);
+amountCell.className="amount";
+tr.appendChild(amountCell);
+const statusCell=document.createElement("td");
+const status=document.createElement("span");
+status.className="status "+order.status;
+status.textContent=order.status;
+statusCell.appendChild(status);
+tr.appendChild(statusCell);
+rows.appendChild(tr);
+});
+document.getElementById("totalOrders").textContent=orders.length;
+document.getElementById("totalSales").textContent=money(orders.reduce((sum,order)=>sum+order.amount,0));
+}
+document.getElementById("orderForm").addEventListener("submit",event=>{
+event.preventDefault();
+const customer=document.getElementById("customer").value.trim();
+const food=document.getElementById("food").value.trim();
+const quantity=Number(document.getElementById("quantity").value);
+const amount=Number(document.getElementById("amount").value);
+if(!customer||!food||quantity<1||amount<1){
+message.className="message error";
+message.textContent="Please enter valid order details.";
+return;
+}
+orders.push({id:nextId++,customer,food,quantity,amount,status:"Preparing"});
+renderOrders();
+message.className="message success";
+message.textContent="✓ Order placed successfully!";
+event.target.reset();
+document.getElementById("quantity").value=1;
+});
+document.getElementById("viewOrders").addEventListener("click",()=>{
+renderOrders();
+message.className="message success";
+message.textContent="✓ Order list refreshed.";
+});
+renderOrders();
+</script>
+<div style="position: fixed; bottom: 10px; right: 10px; font-family: sans-serif; fontsize: 14px; color: #da1111; background-color: rgba(255, 208, 0, 0.8); padding: 5px 10px;
+border-radius: 4px; z-index: 1000;">
+ Name: M HUSSAIN KHAN <br>
+ PRN: 8482871166
+</div> 
+</body>
+</html>
