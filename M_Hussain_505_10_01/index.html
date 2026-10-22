@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+        }
+        h2 { color: #333; }
+        .container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .form-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-add { background-color: #28a745; color: white; width: 100%; }
+        .btn-load { background-color: #007bff; color: white; margin-bottom: 20px; }
+        .btn-clear { background-color: #dc3545; color: white; margin-bottom: 20px; margin-left: 10px; }
+        button:hover { opacity: 0.9; }
+        
+        .table-section { flex: 1; min-width: 400px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th { background-color: #343a40; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        
+        .json-output {
+            margin-top: 15px;
+            background: #e9ecef;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Employee Information Management</h2>
+    
+    <button class="btn-load" id="loadBtn">Load Employees from JSON File</button>
+    <button class="btn-clear" id="clearBtn">Clear Saved Manual Data</button>
+
+    <div class="container">
+        <div class="form-section">
+            <h3>Add Employee</h3>
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label for="empId">Employee ID:</label>
+                    <input type="text" id="empId" required>
+                </div>
+                <div class="form-group">
+                    <label for="empName">Employee Name:</label>
+                    <input type="text" id="empName" required>
+                </div>
+                <div class="form-group">
+                    <label for="dept">Department:</label>
+                    <select id="dept" required>
+                        <option value="">Select Department</option>
+                        <option value="HR">HR</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Finance">Finance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="salary">Salary (in ₹):</label>
+                    <input type="number" id="salary" required>
+                </div>
+                <button type="submit" class="btn-add">Submit & Convert</button>
+            </form>
+
+            <h4 style="margin-top: 20px; margin-bottom: 5px;">Generated JSON String:</h4>
+            <div class="json-output" id="jsonStringOutput">No data submitted yet.</div>
+        </div>
+
+        <div class="table-section">
+            <h3>Employee Records</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    const employeeForm = document.getElementById('employeeForm');
+    const employeeTableBody = document.getElementById('employeeTableBody');
+    const jsonStringOutput = document.getElementById('jsonStringOutput');
+    const loadBtn = document.getElementById('loadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let manualEmployees = JSON.parse(localStorage.getItem('manualEmployees')) || [];
+    let fileEmployees = [];
+
+    function formatTable() {
+        employeeTableBody.innerHTML = '';
+
+        fileEmployees.forEach(appendEmployeeToTable);
+        manualEmployees.forEach(appendEmployeeToTable);
+    }
+
+    function appendEmployeeToTable(employee) {
+        const formattedSalary = Number(employee.salary).toLocaleString('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        });
+
+        const row = document.createElement('tr');
+
+        
+        [employee.id, employee.name, employee.department, formattedSalary]
+            .forEach(value => {
+                const cell = document.createElement('td');
+                cell.textContent = value;
+                row.appendChild(cell);
+            });
+
+        employeeTableBody.appendChild(row);
+    }
+
+    function downloadEmployeesJson() {
+        const json = JSON.stringify(manualEmployees, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = 'employees.json';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+    }
+
+    window.addEventListener('DOMContentLoaded', formatTable);
+
+    employeeForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const employeeObject = {
+            id: document.getElementById('empId').value.trim(),
+            name: document.getElementById('empName').value.trim(),
+            department: document.getElementById('dept').value,
+            salary: document.getElementById('salary').value
+        };
+
+        manualEmployees.push(employeeObject);
+        sessionStorage.setItem('manualEmployees', JSON.stringify(manualEmployees));
+
+        jsonStringOutput.textContent = JSON.stringify(manualEmployees, null, 2);
+
+        formatTable();
+        downloadEmployeesJson();
+        employeeForm.reset();
+    });
+
+    loadBtn.addEventListener('click', function () {
+        fetch('employees.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Could not load file: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error('employees.json must contain a JSON array.');
+                }
+
+                fileEmployees = data;
+                formatTable();
+            })
+            .catch(error => {
+                console.error('Error loading employees.json:', error);
+                alert('Could not load employees.json. Run the page using a local web server and check that the file exists.');
+            });
+    });
+
+    clearBtn.addEventListener('click', function () {
+        localStorage.removeItem('manualEmployees');
+        manualEmployees = [];
+        jsonStringOutput.textContent = 'No data submitted yet.';
+        formatTable();
+    });
+</script>
+</body>
+</html>
