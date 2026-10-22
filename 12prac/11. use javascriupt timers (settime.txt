@@ -1,0 +1,4 @@
+11. use javascriupt timers (settimeout(),setIntervl()) and es6 modules 
+(import/export) to build a dynamic countdown or class scheduler with real- time uptes nd responsoive layout
+
+12.build an interactive rel tim web app using javascript and jquery with dom,events,storageand AJAX integration

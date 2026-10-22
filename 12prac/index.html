@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Summit — Adventure Bookings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="#"><span class="logo-icon">▲</span> summit<span class="logo-dot">.</span></a>
+    <nav>
+      <a class="active" href="#adventures">Adventures</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <button class="header-book" type="button" onclick="document.querySelector('#adventures').scrollIntoView({behavior:'smooth'})">Book a trip <span>↗</span></button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow"><span></span> ADVENTURE, YOUR WAY</div>
+        <h1>Out there is<br>where <em>you belong.</em></h1>
+        <p>Small-group mountain adventures, led by people who know the way.</p>
+        <a class="hero-button" href="#adventures">Find your adventure <span>↗</span></a>
+        <div class="hero-proof">
+          <div class="avatar-stack"><span>M</span><span>J</span><span>A</span><span>+</span></div>
+          <div><strong>4.9/5</strong><span>from 2,400+ happy hikers</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-sun"></div>
+        <div class="peak peak-back"></div>
+        <div class="peak peak-middle"></div>
+        <div class="peak peak-front"></div>
+        <div class="hero-image-label"><span>DOLOMITES, ITALY</span><span>46° 24' N</span></div>
+      </div>
+      <div class="hero-side-note">TAKE THE LONG WAY HOME</div>
+    </section>
+
+    <section class="booking-bar" aria-label="Search adventures">
+      <div class="booking-field">
+        <label for="searchLocation">WHERE TO?</label>
+        <div class="field-control"><span>⌖</span><input id="searchLocation" type="search" placeholder="Anywhere in the mountains"></div>
+      </div>
+      <div class="booking-field">
+        <label for="searchDate">WHEN?</label>
+        <div class="field-control"><span>▦</span><input id="searchDate" type="date"></div>
+      </div>
+      <div class="booking-field">
+        <label for="searchType">YOUR ADVENTURE</label>
+        <div class="field-control"><span>⌁</span><select id="searchType"><option value="">Any experience</option><option>Hiking</option><option>Camping</option><option>Climbing</option><option>Skiing</option></select></div>
+      </div>
+      <button class="search-button" id="searchButton" type="button"><span>⌕</span> Search trips</button>
+    </section>
+
+    <section class="adventures section-wrap" id="adventures">
+      <div class="section-top">
+        <div>
+          <div class="eyebrow"><span></span> YOUR NEXT STORY</div>
+          <h2>Find your kind of wild.</h2>
+          <p>Handpicked adventures. Local guides. Zero guesswork.</p>
+        </div>
+        <a class="view-all" href="#adventures">Explore all trips <span>↗</span></a>
+      </div>
+
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip selected" data-filter="All" type="button">All adventures <span>6</span></button>
+        <button class="filter-chip" data-filter="Hiking" type="button">Hiking</button>
+        <button class="filter-chip" data-filter="Camping" type="button">Camping</button>
+        <button class="filter-chip" data-filter="Climbing" type="button">Climbing</button>
+        <button class="filter-chip" data-filter="Skiing" type="button">Skiing</button>
+      </div>
+
+      <div class="trip-grid" id="tripGrid"></div>
+      <div class="no-results" id="noResults">No trips match those filters. Try another search.</div>
+    </section>
+
+    <section class="how-section" id="how-it-works">
+      <div class="how-copy">
+        <div class="eyebrow"><span></span> GOOD TO GO</div>
+        <h2>Less planning.<br><em>More living.</em></h2>
+        <p>We take care of the details so you can focus on the feeling of being out there.</p>
+      </div>
+      <div class="steps">
+        <article class="step"><span class="step-number">01</span><div><h3>Pick your adventure</h3><p>Find a trip that fits your pace, place, and idea of fun.</p></div></article>
+        <article class="step"><span class="step-number">02</span><div><h3>Save your spot</h3><p>Book securely in minutes. Your guide will handle the rest.</p></div></article>
+        <article class="step"><span class="step-number">03</span><div><h3>Meet us outside</h3><p>Show up ready. We’ll bring the local know-how.</p></div></article>
+      </div>
+    </section>
+
+    <section class="reviews section-wrap" id="reviews">
+      <div class="review-heading">
+        <div class="eyebrow"><span></span> WORD FROM THE TRAIL</div>
+        <h2>Good days. Great people.</h2>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <blockquote>“The kind of weekend that makes you forget to check your phone. Everything was thoughtful, easy, and absolutely beautiful.”</blockquote>
+        <div class="review-person"><div class="review-avatar">S</div><div><strong>Sophie R.</strong><span>Dolomites hut-to-hut hike</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="bookingModal" aria-hidden="true">
+    <div class="booking-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="closeModal" type="button" aria-label="Close">×</button>
+      <div class="modal-icon">▲</div>
+      <div class="eyebrow"><span></span> YOUR NEXT ADVENTURE</div>
+      <h2 id="modalTitle">Book your trip</h2>
+      <p class="modal-trip-name" id="modalTripName"></p>
+      <form id="bookingForm">
+        <label for="guestName">Your name</label>
+        <input id="guestName" name="guestName" type="text" placeholder="First and last name" required maxlength="60">
+        <label for="guestEmail">Email address</label>
+        <input id="guestEmail" name="guestEmail" type="email" placeholder="you@example.com" required>
+        <div class="modal-form-row">
+          <div>
+            <label for="guestCount">Travelers</label>
+            <select id="guestCount" name="guestCount">
+              <option value="1">1 traveler</option>
+              <option value="2">2 travelers</option>
+              <option value="3">3 travelers</option>
+              <option value="4">4 travelers</option>
+            </select>
+          </div>
+          <div>
+            <label for="guestDate">Trip date</label>
+            <select id="guestDate" name="guestDate" required></select>
+          </div>
+        </div>
+        <button class="confirm-button" type="submit">Confirm booking <span>↗</span></button>
+        <p class="secure-note">Secure booking · Free cancellation up to 48 hours before</p>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <footer class="footer">
+    <a class="logo" href="#"><span class="logo-icon">▲</span> summit<span class="logo-dot">.</span></a>
+    <span>Good things happen outside.</span>
+    <span>© 2026 Summit Adventures</span>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
