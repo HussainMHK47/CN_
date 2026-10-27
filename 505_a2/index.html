@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniClass Scheduler</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="script.js" defer></script>
+    <div class="app">
+        <header class="topbar">
+            <div class="logo">
+                <div class="omnitrix">✦</div>
+                <div>
+                    <h1>OmniClass</h1>
+                    <p>YOUR DAILY MISSION CONTROL</p>
+                </div>
+            </div>
+            <div class="status"><span></span> SYSTEM ONLINE</div>
+        </header>
+
+        <section class="hero">
+            <div class="hero-text">
+                <span class="tag">✦ OMNITRIX ACTIVE</span>
+                <h2>Ready for your<br><span>next mission?</span></h2>
+                <p>Every class is a new adventure. Stay focused and level up!</p>
+                <div class="hero-buttons">
+                    <a href="#countdown" class="primary-btn">Start Mission ↗</a>
+                    <a href="#schedule" class="secondary-btn">View Schedule</a>
+                </div>
+            </div>
+            <div class="cartoon">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="alien">
+                    <div class="alien-head">
+                        <div class="eye eye-left"></div>
+                        <div class="eye eye-right"></div>
+                        <div class="mouth"></div>
+                    </div>
+                    <div class="alien-body">
+                        <div class="chest-symbol">✦</div>
+                    </div>
+                    <div class="arm arm-left"></div>
+                    <div class="arm arm-right"></div>
+                    <div class="leg leg-left"></div>
+                    <div class="leg leg-right"></div>
+                </div>
+                <div class="floating-chip chip-one">+ XP</div>
+                <div class="floating-chip chip-two">GO!</div>
+                <div class="ground"></div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <span class="stat-icon">◷</span>
+                <div><p>LOCAL TIME</p><h3 id="clock">00:00:00</h3></div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">▣</span>
+                <div><p>TOTAL CLASSES</p><h3 id="totalClasses">0</h3></div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">★</span>
+                <div><p>MISSIONS DONE</p><h3 id="completedClasses">0</h3></div>
+            </div>
+        </section>
+
+        <section class="main-grid">
+            <div class="panel countdown-panel" id="countdown">
+                <div class="section-heading">
+                    <div><span class="eyebrow">TIME TRACKER</span><h2>Mission Countdown</h2></div>
+                    <span class="live-badge">● LIVE</span>
+                </div>
+                <div class="countdown-display">
+                    <div><strong id="hours">00</strong><span>HOURS</span></div>
+                    <b>:</b>
+                    <div><strong id="minutes">00</strong><span>MINUTES</span></div>
+                    <b>:</b>
+                    <div><strong id="seconds">00</strong><span>SECONDS</span></div>
+                </div>
+                <p class="countdown-caption" id="countdownMessage">Choose a mission to begin!</p>
+                <div class="countdown-actions">
+                    <button id="startBtn" class="primary-btn">▶ Start Countdown</button>
+                    <button id="resetBtn" class="secondary-btn">↻ Reset</button>
+                </div>
+                <div class="progress-track"><div id="progressBar"></div></div>
+            </div>
+
+            <div class="panel add-panel">
+                <div class="section-heading">
+                    <div><span class="eyebrow">NEW MISSION</span><h2>Add a Class</h2></div>
+                    <span class="add-icon">＋</span>
+                </div>
+                <form id="classForm">
+                    <label for="className">CLASS NAME</label>
+                    <input id="className" type="text" placeholder="e.g. JavaScript Lab" required>
+                    <div class="input-row">
+                        <div>
+                            <label for="classTime">START TIME</label>
+                            <input id="classTime" type="time" required>
+                        </div>
+                        <div>
+                            <label for="classDuration">DURATION</label>
+                            <select id="classDuration">
+                                <option value="30">30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60" selected>60 minutes</option>
+                                <option value="90">90 minutes</option>
+                                <option value="120">120 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="primary-btn add-btn" type="submit">＋ Add to Schedule</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="panel schedule-panel" id="schedule">
+            <div class="section-heading">
+                <div><span class="eyebrow">YOUR DAILY MISSIONS</span><h2>Class Schedule</h2></div>
+                <span class="schedule-count" id="scheduleCount">0 missions</span>
+            </div>
+            <div id="classList" class="class-list"></div>
+            <div id="emptyState" class="empty-state">
+                <div>✦</div>
+                <h3>No missions yet!</h3>
+                <p>Add your classes above and start your daily adventure.</p>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-icon">✦</div>
+            <p>OMNICLASS · POWERED BY YOUR POTENTIAL</p>
+            <span>HERO MODE: ON</span>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script type="module" src="app.js"></script>
+    <div style="position: fixed; bottom: 10px; right: 10px; font-family: sans-serif; fontsize: 14px; color: #da1111; background-color: rgba(255, 208, 0, 0.8); padding: 5px 10px;
+border-radius: 4px; z-index: 1000;">
+ Name: M HUSSAIN KHAN <br>
+ PRN: 8482871166
+</div>
+</body>
+</html>
